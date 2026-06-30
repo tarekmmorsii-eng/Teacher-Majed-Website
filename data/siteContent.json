@@ -1,0 +1,291 @@
+{
+  "teacher": {
+    "name": "Teacher Majed",
+    "title": "Professional Online Quran & Arabic Teacher",
+    "email": "contact@example.com",
+    "whatsapp": "+1234567890",
+    "experienceYears": 10,
+    "photoUrl": "/teacher-profile.png",
+    "biography": {
+      "en": "I am a dedicated Quran teacher with over 10 years of experience teaching students from all over the world. My goal is to make learning the Quran accessible, engaging, and spiritually uplifting for everyone.",
+      "ar": "أنا معلم قرآن متفرغ بخبرة تزيد عن 10 سنوات في تدريس الطلاب من جميع أنحاء العالم. هدفي هو جعل تعلم القرآن الكريم متاحاً، ممتعاً، ومثرياً للروح للجميع."
+    },
+    "teachingPhilosophy": {
+      "en": "I believe in a personalized approach to teaching. Every student learns differently, and I tailor my methods to fit their unique needs, ensuring steady progress.",
+      "ar": "أؤمن بنهج مخصص في التدريس. كل طالب يتعلم بطريقة مختلفة، وأنا أقوم بتكييف أساليبي لتناسب احتياجاتهم الفريدة، مما يضمن تقدماً مستمراً."
+    },
+    "qualifications": {
+      "en": [
+        "Ijazah in Hafs 'an 'Asim",
+        "Bachelor's Degree in Islamic Studies",
+        "10+ Years of Online Teaching Experience",
+        "Certified Tajweed Instructor"
+      ],
+      "ar": [
+        "إجازة برواية حفص عن عاصم",
+        "درجة البكالوريوس في الدراسات الإسلامية",
+        "+10 سنوات من الخبرة في التدريس عن بعد",
+        "معلم تجويد معتمد"
+      ]
+    }
+  },
+  "courses": [
+    {
+      "id": "kids",
+      "title": {
+        "en": "Kids Quran Classes",
+        "ar": "حصص القرآن للأطفال"
+      },
+      "description": {
+        "en": "Fun and engaging Quran learning for children with a focus on proper pronunciation.",
+        "ar": "تعلم ممتع وتفاعلي للقرآن الكريم للأطفال مع التركيز على النطق الصحيح."
+      },
+      "icon": "Baby"
+    },
+    {
+      "id": "adults",
+      "title": {
+        "en": "Adult Quran Classes",
+        "ar": "حصص القرآن للكبار"
+      },
+      "description": {
+        "en": "Flexible schedules for adults to learn reading, Tajweed, or memorization.",
+        "ar": "جداول مرنة للكبار لتعلم القراءة، التجويد أو الحفظ."
+      },
+      "icon": "Users"
+    },
+    {
+      "id": "tajweed",
+      "title": {
+        "en": "Tajweed Mastery",
+        "ar": "إتقان التجويد"
+      },
+      "description": {
+        "en": "In-depth study of Tajweed rules to perfect your recitation.",
+        "ar": "دراسة متعمقة لأحكام التجويد لإتقان تلاوتك."
+      },
+      "icon": "BookOpen"
+    },
+    {
+      "id": "memorization",
+      "title": {
+        "en": "Quran Memorization",
+        "ar": "حفظ القرآن الكريم"
+      },
+      "description": {
+        "en": "Structured plans to memorize the Quran with regular revision.",
+        "ar": "خطط منظمة لحفظ القرآن الكريم مع المراجعة الدورية."
+      },
+      "icon": "Heart"
+    }
+  ],
+  "trustBadges": [
+    {
+      "en": "Personalized Learning",
+      "ar": "تعلم مخصص",
+      "icon": "Target"
+    },
+    {
+      "en": "One-to-One Classes",
+      "ar": "حصص فردية",
+      "icon": "User"
+    },
+    {
+      "en": "Kids & Adults",
+      "ar": "للأطفال والكبار",
+      "icon": "Users"
+    },
+    {
+      "en": "Worldwide Online",
+      "ar": "عن بعد حول العالم",
+      "icon": "Globe"
+    },
+    {
+      "en": "Tajweed",
+      "ar": "تجويد",
+      "icon": "Book"
+    },
+    {
+      "en": "Memorization",
+      "ar": "حفظ",
+      "icon": "Brain"
+    }
+  ],
+  "teachingMethod": [
+    {
+      "en": "Assessment",
+      "ar": "تقييم المستوى",
+      "icon": "ClipboardList"
+    },
+    {
+      "en": "Learning Plan",
+      "ar": "خطة التعلم",
+      "icon": "Map"
+    },
+    {
+      "en": "Weekly Lessons",
+      "ar": "حصص أسبوعية",
+      "icon": "Video"
+    },
+    {
+      "en": "Homework",
+      "ar": "واجبات منزلية",
+      "icon": "BookOpen"
+    },
+    {
+      "en": "Progress Reports",
+      "ar": "تقارير التقدم",
+      "icon": "TrendingUp"
+    }
+  ],
+  "whyChooseUs": [
+    {
+      "title": {
+        "en": "Flexible Schedule",
+        "ar": "جدول مرن"
+      },
+      "description": {
+        "en": "Choose the time that suits you best.",
+        "ar": "اختر الوقت الذي يناسبك."
+      },
+      "icon": "Clock"
+    },
+    {
+      "title": {
+        "en": "Native Arabic Teacher",
+        "ar": "معلم عربي متمرس"
+      },
+      "description": {
+        "en": "Learn with perfect pronunciation.",
+        "ar": "تعلم بالنطق الصحيح والمثالي."
+      },
+      "icon": "MessageCircle"
+    },
+    {
+      "title": {
+        "en": "Parent Follow-up",
+        "ar": "متابعة أولياء الأمور"
+      },
+      "description": {
+        "en": "Regular updates on your child's progress.",
+        "ar": "تحديثات دورية عن تقدم طفلك."
+      },
+      "icon": "HeartHandshake"
+    },
+    {
+      "title": {
+        "en": "Affordable Pricing",
+        "ar": "أسعار مناسبة"
+      },
+      "description": {
+        "en": "High-quality education at reasonable rates.",
+        "ar": "تعليم عالي الجودة بأسعار معقولة."
+      },
+      "icon": "Wallet"
+    }
+  ],
+  "testimonials": [
+    {
+      "name": {
+        "en": "Sarah M.",
+        "ar": "سارة م."
+      },
+      "role": {
+        "en": "Parent",
+        "ar": "ولية أمر"
+      },
+      "content": {
+        "en": "My kids love learning Quran with Teacher Majed. He is very patient.",
+        "ar": "أطفالي يحبون تعلم القرآن مع المعلم ماجد. هو صبور جداً."
+      },
+      "rating": 5
+    },
+    {
+      "name": {
+        "en": "Ahmed K.",
+        "ar": "أحمد ك."
+      },
+      "role": {
+        "en": "Adult Student",
+        "ar": "طالب"
+      },
+      "content": {
+        "en": "I finally learned Tajweed properly after years of trying.",
+        "ar": "أخيراً تعلمت التجويد بشكل صحيح بعد سنوات من المحاولة."
+      },
+      "rating": 5
+    },
+    {
+      "name": {
+        "en": "Fatima R.",
+        "ar": "فاطمة ر."
+      },
+      "role": {
+        "en": "Parent",
+        "ar": "ولية أمر"
+      },
+      "content": {
+        "en": "The progress my daughter made in just 3 months is amazing.",
+        "ar": "التقدم الذي أحرزته ابنتي في 3 أشهر فقط مذهل حقاً."
+      },
+      "rating": 5
+    }
+  ],
+  "socials": {
+    "youtube": "https://youtube.com",
+    "instagram": "https://instagram.com",
+    "facebook": "https://facebook.com"
+  },
+  "pricing": [
+    {
+      "id": "basic",
+      "lessonsPerWeek": 1,
+      "price": 40,
+      "recommended": false
+    },
+    {
+      "id": "standard",
+      "lessonsPerWeek": 2,
+      "price": 75,
+      "recommended": true
+    },
+    {
+      "id": "premium",
+      "lessonsPerWeek": 3,
+      "price": 110,
+      "recommended": false
+    }
+  ],
+  "faqs": [
+    {
+      "q": {
+        "en": "How do I start?",
+        "ar": "كيف أبدأ؟"
+      },
+      "a": {
+        "en": "You can start by booking a free trial lesson. We will evaluate your level and set up a plan.",
+        "ar": "يمكنك البدء بحجز حصة تجريبية مجانية. سنقوم بتقييم مستواك ووضع خطة مناسبة."
+      }
+    },
+    {
+      "q": {
+        "en": "Do I need any previous knowledge?",
+        "ar": "هل أحتاج لمعرفة مسبقة؟"
+      },
+      "a": {
+        "en": "No, we have courses for all levels including absolute beginners.",
+        "ar": "لا، لدينا دورات لجميع المستويات بما في ذلك المبتدئين تماماً."
+      }
+    },
+    {
+      "q": {
+        "en": "Can I choose the time?",
+        "ar": "هل يمكنني اختيار الوقت؟"
+      },
+      "a": {
+        "en": "Yes, our schedules are highly flexible. You can choose the time that suits you best.",
+        "ar": "نعم، جداولنا مرنة جداً. يمكنك اختيار الوقت الذي يناسبك."
+      }
+    }
+  ]
+}

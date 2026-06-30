@@ -1,0 +1,62 @@
+{
+  "Header": {
+    "about": "About",
+    "courses": "Courses",
+    "pricing": "Pricing",
+    "contact": "Contact"
+  },
+  "Hero": {
+    "title": "Learn Quran Online with a Native Arab Teacher",
+    "subtitle": "Master Tajweed, Memorization, and Arabic from the comfort of your home.",
+    "bookTrial": "Book Free Trial",
+    "whatsapp": "WhatsApp"
+  },
+  "About": {
+    "title": "About the Teacher",
+    "qualifications": "Qualifications"
+  },
+  "Courses": {
+    "title": "Our Courses",
+    "subtitle": "Choose the right program for your goals."
+  },
+  "Method": {
+    "title": "Our Teaching Method",
+    "subtitle": "A structured path to success."
+  },
+  "WhyChooseUs": {
+    "title": "Why Choose Us?",
+    "subtitle": "We provide the best learning experience."
+  },
+  "Pricing": {
+    "title": "Pricing Plans",
+    "subtitle": "Affordable packages for everyone.",
+    "perMonth": "/ month",
+    "book": "Choose Plan"
+  },
+  "Testimonials": {
+    "title": "Student Stories",
+    "subtitle": "What parents and students say about us."
+  },
+  "FAQ": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know."
+  },
+  "Contact": {
+    "title": "Book Your Free Trial",
+    "subtitle": "Fill out the form below and we will contact you shortly.",
+    "name": "Your Name",
+    "childName": "Child's Name (Optional)",
+    "country": "Country",
+    "age": "Age",
+    "whatsapp": "WhatsApp Number",
+    "email": "Email Address",
+    "preferredTime": "Preferred Time",
+    "message": "Message",
+    "submit": "Send Request"
+  },
+  "Footer": {
+    "quickLinks": "Quick Links",
+    "contactUs": "Contact Us",
+    "rights": "All rights reserved."
+  }
+}
