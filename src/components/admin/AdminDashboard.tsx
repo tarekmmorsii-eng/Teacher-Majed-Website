@@ -139,12 +139,20 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block mb-2 text-sm font-bold">اسم المعلم</label>
-                    <input type="text" value={data.teacher.name} onChange={e => handleChange(['teacher', 'name'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" />
+                    <label className="block mb-2 text-sm font-bold">اسم المعلم (عربي)</label>
+                    <input type="text" value={data.teacher.name.ar} onChange={e => handleChange(['teacher', 'name', 'ar'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" />
                   </div>
                   <div>
-                    <label className="block mb-2 text-sm font-bold">اللقب (مثل: مدرس قرآن)</label>
-                    <input type="text" value={data.teacher.title} onChange={e => handleChange(['teacher', 'title'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" />
+                    <label className="block mb-2 text-sm font-bold">اسم المعلم (إنجليزي)</label>
+                    <input type="text" value={data.teacher.name.en} onChange={e => handleChange(['teacher', 'name', 'en'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" dir="ltr" />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-bold">اللقب (عربي)</label>
+                    <input type="text" value={data.teacher.title.ar} onChange={e => handleChange(['teacher', 'title', 'ar'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-bold">اللقب (إنجليزي)</label>
+                    <input type="text" value={data.teacher.title.en} onChange={e => handleChange(['teacher', 'title', 'en'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" dir="ltr" />
                   </div>
                   <div>
                     <label className="block mb-2 text-sm font-bold">البريد الإلكتروني</label>
@@ -353,23 +361,29 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
           {/* SOCIALS TAB */}
           {activeTab === 'socials' && (
             <div className="space-y-6 animate-in fade-in duration-300">
-              <div className="p-6 rounded-xl border border-foreground/10 bg-foreground/5 shadow-sm space-y-6">
-                <h2 className="text-xl font-bold border-b border-foreground/10 pb-4">روابط التواصل الاجتماعي</h2>
-                
-                <div className="space-y-4 max-w-lg">
-                  <div>
-                    <label className="block mb-2 text-sm font-bold">فيسبوك (Facebook)</label>
-                    <input type="url" value={data.socials.facebook} onChange={e => handleChange(['socials', 'facebook'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" dir="ltr" />
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold">روابط التواصل الاجتماعي</h2>
+                <button onClick={() => addArrayItem('socials', { platform: 'Website', url: 'https://' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-light">
+                  <Plus size={16} /> إضافة رابط
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {data.socials.map((social: any, index: number) => (
+                  <div key={index} className="p-6 rounded-xl border border-foreground/10 bg-foreground/5 shadow-sm relative group flex flex-col gap-4">
+                    <button onClick={() => removeArrayItem('socials', index)} className="absolute top-4 left-4 p-2 text-red-500 hover:bg-red-100 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" title="حذف">
+                      <Trash2 size={18} />
+                    </button>
+                    <div>
+                      <label className="block mb-2 text-sm font-bold">المنصة (مثل: Facebook, Twitter)</label>
+                      <input type="text" value={social.platform} onChange={e => handleArrayChange('socials', index, ['platform'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" dir="ltr" />
+                    </div>
+                    <div>
+                      <label className="block mb-2 text-sm font-bold">الرابط (URL)</label>
+                      <input type="url" value={social.url} onChange={e => handleArrayChange('socials', index, ['url'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" dir="ltr" />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block mb-2 text-sm font-bold">إنستغرام (Instagram)</label>
-                    <input type="url" value={data.socials.instagram} onChange={e => handleChange(['socials', 'instagram'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" dir="ltr" />
-                  </div>
-                  <div>
-                    <label className="block mb-2 text-sm font-bold">يوتيوب (YouTube)</label>
-                    <input type="url" value={data.socials.youtube} onChange={e => handleChange(['socials', 'youtube'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" dir="ltr" />
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           )}

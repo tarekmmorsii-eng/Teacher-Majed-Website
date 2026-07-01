@@ -1,9 +1,15 @@
 {
   "teacher": {
-    "name": "Teacher Majed",
-    "title": "Professional Online Quran & Arabic Teacher",
+    "name": {
+      "en": "Teacher Majed",
+      "ar": "المعلم ماجد"
+    },
+    "title": {
+      "en": "Professional Online Quran & Arabic Teacher",
+      "ar": "معلم قرآن ولغة عربية عبر الإنترنت"
+    },
     "email": "contact@example.com",
-    "whatsapp": "+1234567890",
+    "whatsapp": "⁦+90 555 882 72 31⁩",
     "experienceYears": 10,
     "photoUrl": "/teacher-profile.png",
     "biography": {
@@ -231,11 +237,20 @@
       "rating": 5
     }
   ],
-  "socials": {
-    "youtube": "https://youtube.com",
-    "instagram": "https://instagram.com",
-    "facebook": "https://facebook.com"
-  },
+  "socials": [
+    {
+      "platform": "Facebook",
+      "url": "https://facebook.com"
+    },
+    {
+      "platform": "Instagram",
+      "url": "https://instagram.com"
+    },
+    {
+      "platform": "YouTube",
+      "url": "https://youtube.com"
+    }
+  ],
   "pricing": [
     {
       "id": "basic",
