@@ -17,7 +17,7 @@ export default function TrustBadges() {
     <section className="py-12 border-t border-b bg-primary/5 border-primary/10">
       <div className="container px-4 mx-auto md:px-8">
         <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-10">
-          {siteConfig.trustBadges.map((badge, idx) => {
+          {siteConfig.trustBadges.map((badge: any, idx: number) => {
             const Icon = iconMap[badge.icon];
             return (
               <motion.div 

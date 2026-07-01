@@ -30,7 +30,7 @@ export default function Courses() {
         </motion.div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {siteConfig.courses.map((course, idx) => {
+          {siteConfig.courses.map((course: any, idx: number) => {
             const Icon = iconMap[course.icon];
             return (
               <motion.div 

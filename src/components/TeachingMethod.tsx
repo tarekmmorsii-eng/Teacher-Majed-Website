@@ -31,7 +31,7 @@ export default function TeachingMethod() {
         </motion.div>
 
         <div className="flex flex-col items-center justify-center gap-4 md:flex-row md:gap-2 lg:gap-4">
-          {siteConfig.teachingMethod.map((step, idx) => {
+          {siteConfig.teachingMethod.map((step: any, idx: number) => {
             const Icon = iconMap[step.icon];
             const isLast = idx === siteConfig.teachingMethod.length - 1;
 

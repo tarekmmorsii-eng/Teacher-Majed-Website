@@ -26,7 +26,7 @@ export default function Testimonials() {
         </motion.div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {siteConfig.testimonials.map((testimonial, idx) => (
+          {siteConfig.testimonials.map((testimonial: any, idx: number) => (
             <motion.div 
               key={idx}
               initial={{ opacity: 0, y: 30 }}

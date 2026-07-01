@@ -32,7 +32,7 @@ export default function FAQ() {
         </motion.div>
 
         <div className="space-y-4">
-          {siteConfig.faqs.map((faq, idx) => {
+          {siteConfig.faqs.map((faq: any, idx: number) => {
             const isOpen = openIndex === idx;
             return (
               <motion.div 

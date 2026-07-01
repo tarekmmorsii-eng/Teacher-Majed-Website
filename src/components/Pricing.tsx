@@ -33,7 +33,7 @@ export default function Pricing() {
         </motion.div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 max-w-6xl mx-auto">
-          {siteConfig.pricing.map((plan, idx) => (
+          {siteConfig.pricing.map((plan: any, idx: number) => (
             <motion.div 
               key={plan.id}
               initial={{ opacity: 0, y: 30 }}

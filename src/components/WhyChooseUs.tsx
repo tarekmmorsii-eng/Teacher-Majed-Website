@@ -30,7 +30,7 @@ export default function WhyChooseUs() {
         </motion.div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          {siteConfig.whyChooseUs.map((feature, idx) => {
+          {siteConfig.whyChooseUs.map((feature: any, idx: number) => {
             const Icon = iconMap[feature.icon];
             return (
               <motion.div 
