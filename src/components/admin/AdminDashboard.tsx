@@ -31,13 +31,23 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
   };
 
   const handlePublish = async () => {
-    const token = prompt('الرجاء إدخال رمز الوصول (GitHub PAT) الخاص بك لنشر التعديلات:');
-    if (!token) return;
+    let token = localStorage.getItem('github_deploy_token');
+    
+    if (!token) {
+      token = prompt('الرجاء إدخال رمز الوصول (GitHub PAT) الخاص بك لنشر التعديلات:');
+      if (!token) return;
+      localStorage.setItem('github_deploy_token', token);
+    }
     
     setPublishing(true);
-    setMessage('جاري بدء عملية النشر...');
+    setMessage('جاري حفظ التعديلات وبدء عملية النشر...');
     
     try {
+      // حفظ التعديلات أولاً
+      const docRef = doc(db, 'data', 'siteData');
+      await setDoc(docRef, data);
+
+      // ثم بدء النشر
       const response = await fetch('https://api.github.com/repos/tarekmmorsii-eng/Teacher-Majed-Website/actions/workflows/deploy.yml/dispatches', {
         method: 'POST',
         headers: {
@@ -48,9 +58,10 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
       });
       
       if (response.ok) {
-        setMessage('تم بدء عملية النشر! سيتم تحديث الموقع خلال 3 دقائق تقريباً.');
+        setMessage('تم الحفظ وبدء عملية النشر بنجاح! سيتم تحديث الموقع خلال 3 دقائق تقريباً.');
       } else {
-        setMessage(`فشل النشر، تأكد من الرمز السري.`);
+        localStorage.removeItem('github_deploy_token');
+        setMessage(`فشل النشر، يرجى التأكد من الرمز السري والمحاولة مجدداً.`);
       }
     } catch (err: any) {
       setMessage('حدث خطأ في الاتصال بـ GitHub.');
