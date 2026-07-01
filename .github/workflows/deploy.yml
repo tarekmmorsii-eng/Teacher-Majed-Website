@@ -18,7 +18,7 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       - name: Remove Admin Dashboard for Static Export
         run: |
