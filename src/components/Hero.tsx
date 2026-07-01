@@ -49,7 +49,9 @@ export default function Hero() {
             {t('bookTrial')}
           </a>
           <a 
-            href="#contact"
+            href={`https://wa.me/${siteConfig?.teacher?.whatsapp?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(locale === 'ar' ? 'مرحباً معلم ماجد، أود الاستفسار عن دروس تحفيظ القرآن الكريم والمواعيد والأسعار.' : 'Hello Teacher Majed, I would like to inquire about Quran memorization classes, schedules, and prices.')}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-8 py-4 text-lg font-semibold transition-all border-2 rounded-full shadow-sm text-foreground border-primary/20 hover:border-primary hover:bg-primary/5 hover:-translate-y-1"
           >
             {t('whatsapp')}
