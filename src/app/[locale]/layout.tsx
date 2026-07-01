@@ -20,11 +20,45 @@ export async function generateMetadata({ params }: { params: Promise<{locale: st
   const { locale } = await params;
   const isAr = locale === 'ar';
   const siteData = getSiteData();
+  const validLocale = (locale === 'ar' || locale === 'en') ? locale : 'en';
   
+  const teacherName = siteData?.teacher?.name?.[validLocale] || 'Teacher';
+  
+  const title = isAr 
+    ? `${teacherName} | مدرس قرآن ولغة عربية عن بعد` 
+    : `${teacherName} | Online Quran & Arabic Teacher`;
+    
+  const description = isAr 
+    ? 'أتقن التجويد، الحفظ، واللغة العربية مع المعلم من راحة منزلك.' 
+    : 'Master Tajweed, Memorization, and Arabic from the comfort of your home.';
+
+  const imageUrl = '/teacher-profile.png';
+
   return {
-    title: isAr ? `${siteData?.teacher?.name} | مدرس قرآن ولغة عربية عن بعد` : `${siteData?.teacher?.name} | Online Quran & Arabic Teacher`,
-    description: isAr ? 'أتقن التجويد، الحفظ، واللغة العربية مع المعلم من راحة منزلك.' : 'Master Tajweed, Memorization, and Arabic from the comfort of your home.',
+    title,
+    description,
     keywords: isAr ? 'قرآن, تجويد, معلم, عربي, أونلاين' : 'Quran, Tajweed, Teacher, Arabic, Online',
+    openGraph: {
+      title,
+      description,
+      url: 'https://teacher-majed.mushafalmurajaa.com',
+      siteName: teacherName,
+      images: [
+        {
+          url: imageUrl,
+          width: 800,
+          height: 800,
+          alt: teacherName,
+        },
+      ],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [imageUrl],
+    },
   };
 }
 
