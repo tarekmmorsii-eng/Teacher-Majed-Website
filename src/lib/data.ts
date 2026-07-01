@@ -1,24 +1,24 @@
-import fs from 'fs';
-import path from 'path';
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "./firebase";
 
-const dataFilePath = path.join(process.cwd(), 'data', 'siteContent.json');
-
-export function getSiteData() {
+export async function getSiteData() {
   try {
-    const fileContent = fs.readFileSync(dataFilePath, 'utf8');
-    return JSON.parse(fileContent);
+    const docRef = doc(db, "data", "siteData");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.error("No such document!");
+      return null;
+    }
   } catch (error) {
-    console.error("Error reading site data:", error);
+    console.error("Error reading site data from Firebase:", error);
     return null;
   }
 }
 
-export function saveSiteData(data: any) {
-  try {
-    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), 'utf8');
-    return true;
-  } catch (error) {
-    console.error("Error saving site data:", error);
-    return false;
-  }
+// saveSiteData is no longer needed on the server side
+// The admin dashboard will use Firebase client SDK directly to save data.
+export async function saveSiteData(data: any) {
+  throw new Error("saveSiteData should be called from the client side using Firebase SDK.");
 }

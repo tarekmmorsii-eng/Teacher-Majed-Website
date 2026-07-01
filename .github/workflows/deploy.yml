@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -20,12 +21,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Remove Admin Dashboard for Static Export
-        run: |
-          echo "Removing Admin Panel to allow Next.js Static Export..."
-          rm -rf src/app/admin
-          rm -rf src/components/admin
-          rm -f src/app/actions.ts
+
 
       - name: Build Static Site
         run: npm run build

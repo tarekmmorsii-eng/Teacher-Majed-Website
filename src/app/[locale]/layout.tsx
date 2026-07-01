@@ -19,7 +19,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{locale: string}> }) {
   const { locale } = await params;
   const isAr = locale === 'ar';
-  const siteData = getSiteData();
+  const siteData = await getSiteData();
   const validLocale = (locale === 'ar' || locale === 'en') ? locale : 'en';
   
   const teacherName = siteData?.teacher?.name?.[validLocale] || 'Teacher';
@@ -80,7 +80,7 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
   const messages = await getMessages();
-  const siteData = getSiteData();
+  const siteData = await getSiteData();
   const dir = locale === 'ar' ? 'rtl' : 'ltr';
 
   return (

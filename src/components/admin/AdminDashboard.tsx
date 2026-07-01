@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { updateSiteData, logoutAdmin } from '@/app/actions';
-import { Plus, Trash2, Save, LogOut, LayoutDashboard, Book, DollarSign, MessageSquare, HelpCircle, Star, Settings } from 'lucide-react';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '@/lib/firebase';
+import { signOut } from 'firebase/auth';
+import { Plus, Trash2, Save, LogOut, LayoutDashboard, Book, DollarSign, MessageSquare, HelpCircle, Star, Settings, UploadCloud } from 'lucide-react';
 
 export default function AdminDashboard({ initialData }: { initialData: any }) {
   const [data, setData] = useState(initialData);
@@ -10,27 +12,55 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
   const [message, setMessage] = useState('');
   const [activeTab, setActiveTab] = useState('teacher');
 
+  const [publishing, setPublishing] = useState(false);
+
   const handleSave = async () => {
     setSaving(true);
     setMessage('');
     try {
-      const res = await updateSiteData(data);
-      if (res.success) {
-        setMessage('تم حفظ التعديلات بنجاح!');
-        setTimeout(() => setMessage(''), 3000);
-      } else {
-        setMessage(res.error || 'خطأ في الحفظ');
-      }
+      const docRef = doc(db, 'data', 'siteData');
+      await setDoc(docRef, data);
+      setMessage('تم الحفظ بنجاح! لا تنسَ الضغط على "نشر التعديلات" لتظهر في الموقع.');
+      setTimeout(() => setMessage(''), 5000);
     } catch (err: any) {
+      console.error(err);
       setMessage('حدث خطأ أثناء الحفظ');
     } finally {
       setSaving(false);
     }
   };
 
+  const handlePublish = async () => {
+    const token = prompt('الرجاء إدخال رمز الوصول (GitHub PAT) الخاص بك لنشر التعديلات:');
+    if (!token) return;
+    
+    setPublishing(true);
+    setMessage('جاري بدء عملية النشر...');
+    
+    try {
+      const response = await fetch('https://api.github.com/repos/tarekmmorsii-eng/Teacher-Majed-Website/actions/workflows/deploy.yml/dispatches', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+        },
+        body: JSON.stringify({ ref: 'master' })
+      });
+      
+      if (response.ok) {
+        setMessage('تم بدء عملية النشر! سيتم تحديث الموقع خلال 3 دقائق تقريباً.');
+      } else {
+        setMessage(`فشل النشر، تأكد من الرمز السري.`);
+      }
+    } catch (err: any) {
+      setMessage('حدث خطأ في الاتصال بـ GitHub.');
+    } finally {
+      setPublishing(false);
+    }
+  };
+
   const handleLogout = async () => {
-    await logoutAdmin();
-    window.location.href = '/admin';
+    await signOut(auth);
   };
 
   const handleChange = (path: string[], value: any) => {
@@ -93,7 +123,11 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
           <a href="/" className="flex items-center gap-2 px-6 py-2 text-primary font-bold rounded-lg border border-primary/20 bg-background hover:bg-primary/5 transition-colors">
             العودة للموقع
           </a>
-          <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-6 py-2 text-white rounded-lg bg-primary hover:bg-primary-light transition-colors disabled:opacity-50">
+          <button onClick={handlePublish} disabled={publishing || saving} className="flex items-center gap-2 px-6 py-2 text-white rounded-lg bg-green-600 hover:bg-green-700 transition-colors disabled:opacity-50">
+            <UploadCloud size={18} />
+            {publishing ? 'جاري النشر...' : 'نشر التعديلات'}
+          </button>
+          <button onClick={handleSave} disabled={saving || publishing} className="flex items-center gap-2 px-6 py-2 text-white rounded-lg bg-primary hover:bg-primary-light transition-colors disabled:opacity-50">
             <Save size={18} />
             {saving ? 'جاري الحفظ...' : 'حفظ التعديلات'}
           </button>
