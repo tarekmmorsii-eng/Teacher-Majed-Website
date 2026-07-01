@@ -32,16 +32,19 @@ export async function generateMetadata({ params }: { params: Promise<{locale: st
     ? 'أتقن التجويد، الحفظ، واللغة العربية مع المعلم من راحة منزلك.' 
     : 'Master Tajweed, Memorization, and Arabic from the comfort of your home.';
 
-  const imageUrl = '/teacher-profile.png';
+  // OpenGraph requires absolute URLs for images to show up in WhatsApp/Facebook
+  const siteUrl = 'https://teacher-majed.mushafalmurajaa.com';
+  const imageUrl = `${siteUrl}/teacher-profile.png`;
 
   return {
+    metadataBase: new URL(siteUrl),
     title,
     description,
     keywords: isAr ? 'قرآن, تجويد, معلم, عربي, أونلاين' : 'Quran, Tajweed, Teacher, Arabic, Online',
     openGraph: {
       title,
       description,
-      url: 'https://teacher-majed.mushafalmurajaa.com',
+      url: siteUrl,
       siteName: teacherName,
       images: [
         {
