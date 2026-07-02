@@ -115,28 +115,40 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
     setMessage('جاري رفع الصورة...');
     
     try {
-      const storageRef = ref(storage, `images/teacher-profile-${Date.now()}`);
+      // Clean file name to avoid issues with special characters
+      const safeFileName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '');
+      const storageRef = ref(storage, `images/teacher-profile-${Date.now()}-${safeFileName}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on(
         'state_changed',
         () => {},
-        (error) => {
-          console.error(error);
-          setMessage('فشل رفع الصورة');
+        (error: any) => {
+          console.error('Upload error details:', error);
+          if (error.code === 'storage/unauthorized') {
+            setMessage('فشل الرفع: غير مصرح لك برفع الملفات. تأكد من إعدادات (Storage Rules) في فايربيز.');
+          } else {
+            setMessage(`فشل رفع الصورة: ${error.message || 'خطأ غير معروف'}`);
+          }
           setUploadingImage(false);
         },
         async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          handleChange(['teacher', 'image'], downloadURL);
-          setMessage('تم رفع الصورة بنجاح!');
-          setUploadingImage(false);
-          setTimeout(() => setMessage(''), 3000);
+          try {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            handleChange(['teacher', 'image'], downloadURL);
+            setMessage('تم رفع الصورة بنجاح!');
+            setUploadingImage(false);
+            setTimeout(() => setMessage(''), 3000);
+          } catch (urlError: any) {
+            console.error('Error getting download URL:', urlError);
+            setMessage(`فشل جلب رابط الصورة: ${urlError.message}`);
+            setUploadingImage(false);
+          }
         }
       );
-    } catch (err) {
-      console.error(err);
-      setMessage('حدث خطأ أثناء الرفع');
+    } catch (err: any) {
+      console.error('Upload init error:', err);
+      setMessage(`حدث خطأ أثناء بدء الرفع: ${err.message}`);
       setUploadingImage(false);
     }
   };
