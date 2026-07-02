@@ -13,6 +13,7 @@ export default function Courses() {
   const locale = useLocale() as 'ar' | 'en';
   const t = useTranslations('Courses');
   const siteConfig = useSiteConfig();
+  if (siteConfig?.visibility?.courses === false) return null;
 
   return (
     <section id="courses" className="py-20 bg-background">

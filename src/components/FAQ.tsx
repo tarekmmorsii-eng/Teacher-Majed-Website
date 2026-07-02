@@ -10,6 +10,7 @@ export default function FAQ() {
   const locale = useLocale() as 'ar' | 'en';
   const t = useTranslations('FAQ');
   const siteConfig = useSiteConfig();
+  if (siteConfig?.visibility?.faqs === false) return null;
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggle = (idx: number) => {

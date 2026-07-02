@@ -9,6 +9,7 @@ export default function Testimonials() {
   const locale = useLocale() as 'ar' | 'en';
   const t = useTranslations('Testimonials');
   const siteConfig = useSiteConfig();
+  if (siteConfig?.visibility?.testimonials === false) return null;
 
   return (
     <section className="py-20 bg-background">

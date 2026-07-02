@@ -9,6 +9,7 @@ export default function About() {
   const t = useTranslations('About');
   const siteConfig = useSiteConfig();
   const teacher = siteConfig.teacher;
+  if (siteConfig?.visibility?.teacher === false) return null;
 
   return (
     <section id="about" className="py-20 bg-background">

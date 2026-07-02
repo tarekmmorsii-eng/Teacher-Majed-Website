@@ -9,6 +9,7 @@ export default function Pricing() {
   const locale = useLocale() as 'ar' | 'en';
   const t = useTranslations('Pricing');
   const siteConfig = useSiteConfig();
+  if (siteConfig?.visibility?.pricing === false) return null;
 
   // Helper translations for plan names inside component based on ID
   const planNames: Record<string, {en: string, ar: string}> = {

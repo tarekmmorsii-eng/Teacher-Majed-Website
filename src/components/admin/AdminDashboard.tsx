@@ -66,6 +66,7 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
       const newData = JSON.parse(JSON.stringify(prev));
       let current = newData;
       for (let i = 0; i < path.length - 1; i++) {
+        if (current[path[i]] === undefined) current[path[i]] = {};
         current = current[path[i]];
       }
       current[path[path.length - 1]] = value;
@@ -99,6 +100,24 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
       return newData;
     });
   };
+
+  const renderVisibilityToggle = (sectionName: string, label: string) => (
+    <div className="flex items-center justify-between p-6 mb-6 rounded-xl border border-foreground/10 bg-foreground/5 shadow-sm">
+      <div className="flex flex-col">
+        <span className="font-bold text-lg">عرض قسم ({label}) في الموقع</span>
+        <span className="text-sm opacity-70 mt-1">إذا قمت بتعطيل هذا الخيار، سيختفي القسم تماماً من الموقع للزوار.</span>
+      </div>
+      <label className="relative inline-flex items-center cursor-pointer">
+        <input 
+          type="checkbox" 
+          className="sr-only peer" 
+          checked={data.visibility?.[sectionName] !== false}
+          onChange={(e) => handleChange(['visibility', sectionName], e.target.checked)}
+        />
+        <div className="w-14 h-7 bg-foreground/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+      </label>
+    </div>
+  );
 
   const tabs = [
     { id: 'teacher', label: 'المعلم', icon: <LayoutDashboard size={18} /> },
@@ -166,6 +185,7 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
           {/* TEACHER TAB */}
           {activeTab === 'teacher' && (
             <div className="space-y-6 animate-in fade-in duration-300">
+              {renderVisibilityToggle('teacher', 'النبذة والمعلم')}
               <div className="p-6 rounded-xl border border-foreground/10 bg-foreground/5 shadow-sm space-y-6">
                 <h2 className="text-xl font-bold border-b border-foreground/10 pb-4">البيانات الأساسية</h2>
                 
@@ -221,6 +241,7 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
           {/* COURSES TAB */}
           {activeTab === 'courses' && (
             <div className="space-y-6 animate-in fade-in duration-300">
+              {renderVisibilityToggle('courses', 'الدورات')}
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold">إدارة الدورات</h2>
                 <button onClick={() => addArrayItem('courses', { id: `course-${Date.now()}`, title: { ar: '', en: '' }, description: { ar: '', en: '' }, icon: 'BookOpen' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-light">
@@ -260,6 +281,7 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
           {/* PRICING TAB */}
           {activeTab === 'pricing' && (
             <div className="space-y-6 animate-in fade-in duration-300">
+              {renderVisibilityToggle('pricing', 'باقات الأسعار')}
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold">باقات الأسعار</h2>
                 <button onClick={() => addArrayItem('pricing', { id: `plan-${Date.now()}`, lessonsPerWeek: 1, price: 0, recommended: false })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-light">
@@ -301,6 +323,7 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
           {/* TESTIMONIALS TAB */}
           {activeTab === 'testimonials' && (
             <div className="space-y-6 animate-in fade-in duration-300">
+              {renderVisibilityToggle('testimonials', 'آراء الطلاب')}
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold">آراء الطلاب</h2>
                 <button onClick={() => addArrayItem('testimonials', { name: { ar: '', en: '' }, role: { ar: '', en: '' }, content: { ar: '', en: '' }, rating: 5 })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-light">
@@ -354,6 +377,7 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
           {/* FAQS TAB */}
           {activeTab === 'faqs' && (
             <div className="space-y-6 animate-in fade-in duration-300">
+              {renderVisibilityToggle('faqs', 'الأسئلة الشائعة')}
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold">الأسئلة الشائعة</h2>
                 <button onClick={() => addArrayItem('faqs', { q: { ar: '', en: '' }, a: { ar: '', en: '' } })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-light">
@@ -393,6 +417,7 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
           {/* SOCIALS TAB */}
           {activeTab === 'socials' && (
             <div className="space-y-6 animate-in fade-in duration-300">
+              {renderVisibilityToggle('socials', 'روابط التواصل الاجتماعي')}
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold">روابط التواصل الاجتماعي</h2>
                 <button onClick={() => addArrayItem('socials', { platform: 'Website', url: 'https://' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-light">

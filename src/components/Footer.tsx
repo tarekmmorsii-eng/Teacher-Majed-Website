@@ -47,7 +47,7 @@ export default function Footer() {
               {siteConfig.teacher.title?.[locale]}
             </p>
             <div className="flex flex-wrap gap-4 pt-2">
-              {siteConfig.socials.map((social: any, idx: number) => {
+              {siteConfig?.visibility?.socials !== false && siteConfig.socials.map((social: any, idx: number) => {
                 const Icon = iconMap[social.platform] || iconMap[social.platform.toLowerCase()] || LinkIcon;
                 return (
                   <a key={idx} href={social.url} target="_blank" rel="noopener noreferrer" title={social.platform} className="transition-colors hover:text-secondary">
