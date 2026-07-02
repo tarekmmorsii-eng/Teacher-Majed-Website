@@ -5,6 +5,9 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSiteConfig } from '@/components/SiteConfigProvider';
 
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+
 export default function ContactForm() {
   const t = useTranslations('Contact');
   const siteConfig = useSiteConfig();
@@ -18,6 +21,8 @@ export default function ContactForm() {
     age: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
@@ -26,23 +31,43 @@ export default function ContactForm() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
-    // Format message for WhatsApp
-    let text = `مرحباً، أود حجز حصة تجريبية.\n\n`;
-    text += `*الاسم:* ${formData.name}\n`;
-    if (formData.childName) text += `*اسم الطالب:* ${formData.childName}\n`;
-    text += `*البريد الإلكتروني:* ${formData.email}\n`;
-    text += `*رقم الواتساب:* ${formData.whatsapp}\n`;
-    text += `*البلد:* ${formData.country}\n`;
-    text += `*العمر:* ${formData.age}\n`;
-    if (formData.message) text += `\n*رسالة إضافية:*\n${formData.message}\n`;
+    try {
+      // 1. Save to Firebase Database
+      await addDoc(collection(db, 'requests'), {
+        ...formData,
+        createdAt: serverTimestamp(),
+        status: 'new' // for admin tracking
+      });
 
-    const encodedMessage = encodeURIComponent(text);
-    const whatsappNumber = siteConfig.teacher.whatsapp.replace(/[^0-9]/g, '');
-    
-    window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+      // 2. Format message for WhatsApp
+      let text = `مرحباً، أود حجز حصة تجريبية.\n\n`;
+      text += `*الاسم:* ${formData.name}\n`;
+      if (formData.childName) text += `*اسم الطالب:* ${formData.childName}\n`;
+      text += `*البريد الإلكتروني:* ${formData.email}\n`;
+      text += `*رقم الواتساب:* ${formData.whatsapp}\n`;
+      text += `*البلد:* ${formData.country}\n`;
+      text += `*العمر:* ${formData.age}\n`;
+      if (formData.message) text += `\n*رسالة إضافية:*\n${formData.message}\n`;
+
+      const encodedMessage = encodeURIComponent(text);
+      const whatsappNumber = siteConfig.teacher.whatsapp.replace(/[^0-9]/g, '');
+      
+      setSubmitSuccess(true);
+      setFormData({ name: '', childName: '', email: '', whatsapp: '', country: '', age: '', message: '' });
+      
+      window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+      
+      setTimeout(() => setSubmitSuccess(false), 5000);
+    } catch (error) {
+      console.error("Error saving request: ", error);
+      alert('عذراً، حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -101,10 +126,26 @@ export default function ContactForm() {
 
           <button 
             type="submit" 
-            className="w-full py-4 mt-8 text-lg font-bold text-white transition-all rounded-xl bg-primary hover:bg-primary-light hover:shadow-lg hover:-translate-y-1"
+            disabled={isSubmitting}
+            className="w-full py-4 mt-8 text-lg font-bold text-white transition-all rounded-xl bg-primary hover:bg-primary-light hover:shadow-lg hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
           >
-            {t('submit')}
+            {isSubmitting ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                جاري المعالجة...
+              </>
+            ) : t('submit')}
           </button>
+          
+          {submitSuccess && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-4 mt-4 text-center text-green-800 bg-green-100 rounded-xl"
+            >
+              تم إرسال طلبك بنجاح! سيتم تحويلك للواتساب الآن.
+            </motion.div>
+          )}
         </motion.form>
       </div>
     </section>

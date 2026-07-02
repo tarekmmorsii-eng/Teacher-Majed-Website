@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { doc, setDoc } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+import { doc, setDoc, collection, query, orderBy, onSnapshot, deleteDoc } from 'firebase/firestore';
 import { auth, db, storage } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { Plus, Trash2, Save, LogOut, LayoutDashboard, Book, DollarSign, MessageSquare, HelpCircle, Star, Settings, UploadCloud, Video, FileText } from 'lucide-react';
+import { Plus, Trash2, Save, LogOut, LayoutDashboard, Book, DollarSign, MessageSquare, HelpCircle, Star, Settings, UploadCloud, Video, FileText, Bell } from 'lucide-react';
 
 export default function AdminDashboard({ initialData }: { initialData: any }) {
   const [data, setData] = useState({
@@ -35,6 +35,28 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
   const [activeTab, setActiveTab] = useState('teacher');
 
   const [publishing, setPublishing] = useState(false);
+  const [requests, setRequests] = useState<any[]>([]);
+
+  useEffect(() => {
+    const q = query(collection(db, 'requests'), orderBy('createdAt', 'desc'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const reqData: any[] = [];
+      snapshot.forEach((doc) => reqData.push({ id: doc.id, ...doc.data() }));
+      setRequests(reqData);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleDeleteRequest = async (id: string) => {
+    if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+      try {
+        await deleteDoc(doc(db, 'requests', id));
+      } catch (err) {
+        console.error(err);
+        setMessage('حدث خطأ أثناء حذف الطلب');
+      }
+    }
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -178,6 +200,7 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
   );
 
   const tabs = [
+    { id: 'requests', label: 'الطلبات', icon: <Bell size={18} /> },
     { id: 'teacher', label: 'المعلم والواجهة', icon: <LayoutDashboard size={18} /> },
     { id: 'videos', label: 'الفيديوهات', icon: <Video size={18} /> },
     { id: 'articles', label: 'المقالات', icon: <FileText size={18} /> },
@@ -239,6 +262,68 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
           {message && (
             <div className={`p-4 mb-6 rounded-lg font-bold flex items-center gap-2 ${message.includes('نجاح') ? 'bg-green-100/80 text-green-800' : 'bg-red-100/80 text-red-800'}`}>
               {message}
+            </div>
+          )}
+
+          {/* REQUESTS TAB */}
+          {activeTab === 'requests' && (
+            <div className="space-y-6 animate-in fade-in duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold">طلبات الحجز الواردة ({requests.length})</h2>
+              </div>
+              
+              {requests.length === 0 ? (
+                <div className="p-8 text-center text-foreground/60 border border-dashed border-foreground/20 rounded-xl">
+                  لا توجد طلبات جديدة حالياً.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-6">
+                  {requests.map((req) => (
+                    <div key={req.id} className="p-6 rounded-xl border border-primary/20 bg-primary/5 shadow-sm relative group flex flex-col gap-4">
+                      <button onClick={() => handleDeleteRequest(req.id)} className="absolute top-4 left-4 p-2 text-red-500 hover:bg-red-100 rounded-lg transition-colors" title="حذف الطلب">
+                        <Trash2 size={18} />
+                      </button>
+                      
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="text-lg font-bold text-primary mb-1">
+                            {req.name} {req.childName ? `(الطالب: ${req.childName})` : ''}
+                          </h3>
+                          <div className="text-sm text-foreground/60">
+                            {req.createdAt?.toDate().toLocaleString('ar-EG', { dateStyle: 'full', timeStyle: 'short' })}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+                        <div className="bg-background p-3 rounded-lg border border-foreground/10">
+                          <span className="block text-xs text-foreground/60 mb-1">البلد</span>
+                          <span className="font-semibold">{req.country}</span>
+                        </div>
+                        <div className="bg-background p-3 rounded-lg border border-foreground/10">
+                          <span className="block text-xs text-foreground/60 mb-1">العمر</span>
+                          <span className="font-semibold">{req.age}</span>
+                        </div>
+                        <div className="bg-background p-3 rounded-lg border border-foreground/10">
+                          <span className="block text-xs text-foreground/60 mb-1">رقم الواتساب</span>
+                          <a href={`https://wa.me/${req.whatsapp?.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline dir-ltr inline-block" dir="ltr">{req.whatsapp}</a>
+                        </div>
+                        <div className="bg-background p-3 rounded-lg border border-foreground/10">
+                          <span className="block text-xs text-foreground/60 mb-1">البريد الإلكتروني</span>
+                          <span className="font-semibold break-all">{req.email}</span>
+                        </div>
+                      </div>
+
+                      {req.message && (
+                        <div className="mt-2 bg-background p-4 rounded-lg border border-foreground/10">
+                          <span className="block text-xs text-foreground/60 mb-2">رسالة إضافية</span>
+                          <p className="whitespace-pre-wrap">{req.message}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
