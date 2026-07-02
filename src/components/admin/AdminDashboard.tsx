@@ -31,14 +31,6 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
   };
 
   const handlePublish = async () => {
-    let token = localStorage.getItem('github_deploy_token');
-    
-    if (!token) {
-      token = prompt('الرجاء إدخال رمز الوصول (GitHub PAT) الخاص بك لنشر التعديلات:');
-      if (!token) return;
-      localStorage.setItem('github_deploy_token', token);
-    }
-    
     setPublishing(true);
     setMessage('جاري حفظ التعديلات وبدء عملية النشر...');
     
@@ -47,24 +39,19 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
       const docRef = doc(db, 'data', 'siteData');
       await setDoc(docRef, data);
 
-      // ثم بدء النشر
-      const response = await fetch('https://api.github.com/repos/tarekmmorsii-eng/Teacher-Majed-Website/actions/workflows/deploy.yml/dispatches', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/vnd.github.v3+json',
-        },
-        body: JSON.stringify({ ref: 'master' })
+      // ثم بدء النشر عبر Vercel Deploy Hook
+      const response = await fetch('https://api.vercel.com/v1/integrations/deploy/prj_jLDS3JQEvLU15d1S3pBXLuv35paL/0Y22yYq3cb', {
+        method: 'POST'
       });
       
       if (response.ok) {
-        setMessage('تم الحفظ وبدء عملية النشر بنجاح! سيتم تحديث الموقع خلال 3 دقائق تقريباً.');
+        setMessage('تم الحفظ وبدء عملية النشر بنجاح! سيتم تحديث الموقع خلال دقائق قليلة.');
+        setTimeout(() => setMessage(''), 5000);
       } else {
-        localStorage.removeItem('github_deploy_token');
-        setMessage(`فشل النشر، يرجى التأكد من الرمز السري والمحاولة مجدداً.`);
+        setMessage(`فشل النشر، يرجى المحاولة مجدداً.`);
       }
     } catch (err: any) {
-      setMessage('حدث خطأ في الاتصال بـ GitHub.');
+      setMessage('حدث خطأ أثناء محاولة النشر.');
     } finally {
       setPublishing(false);
     }
