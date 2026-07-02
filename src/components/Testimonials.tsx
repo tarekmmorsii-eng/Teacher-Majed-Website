@@ -43,15 +43,15 @@ export default function Testimonials() {
                 ))}
               </div>
               
-              <p className="mb-6 leading-relaxed text-foreground/80">"{testimonial.content[locale]}"</p>
+              <p className="mb-6 leading-relaxed text-foreground/80">"{testimonial.content?.[locale]}"</p>
               
               <div className="flex items-center gap-4">
                 <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 font-bold text-white rounded-full bg-primary">
-                  {testimonial.name[locale].charAt(0)}
+                  {testimonial.name?.[locale].charAt(0)}
                 </div>
                 <div>
-                  <h4 className="font-bold text-foreground">{testimonial.name[locale]}</h4>
-                  <p className="text-sm text-foreground/60">{testimonial.role[locale]}</p>
+                  <h4 className="font-bold text-foreground">{testimonial.name?.[locale]}</h4>
+                  <p className="text-sm text-foreground/60">{testimonial.role?.[locale]}</p>
                 </div>
               </div>
             </motion.div>

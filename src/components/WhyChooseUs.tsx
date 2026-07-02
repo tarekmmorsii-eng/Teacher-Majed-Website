@@ -45,8 +45,8 @@ export default function WhyChooseUs() {
                   {Icon && <Icon size={32} />}
                 </div>
                 <div>
-                  <h3 className="mb-2 text-xl font-bold text-foreground">{feature.title[locale]}</h3>
-                  <p className="leading-relaxed text-foreground/70">{feature.description[locale]}</p>
+                  <h3 className="mb-2 text-xl font-bold text-foreground">{feature.title?.[locale]}</h3>
+                  <p className="leading-relaxed text-foreground/70">{feature.description?.[locale]}</p>
                 </div>
               </motion.div>
             );

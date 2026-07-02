@@ -47,7 +47,7 @@ export default function FAQ() {
                   onClick={() => toggle(idx)}
                   className="flex items-center justify-between w-full p-6 text-left transition-colors hover:bg-primary/5"
                 >
-                  <span className="text-lg font-semibold text-foreground">{faq.q[locale]}</span>
+                  <span className="text-lg font-semibold text-foreground">{faq.q?.[locale]}</span>
                   <ChevronDown className={`transition-transform duration-300 text-primary ${isOpen ? 'rotate-180' : ''}`} />
                 </button>
                 <AnimatePresence>
@@ -59,7 +59,7 @@ export default function FAQ() {
                       transition={{ duration: 0.3 }}
                     >
                       <div className="p-6 pt-0 leading-relaxed text-foreground/70 border-t border-primary/5">
-                        {faq.a[locale]}
+                        {faq.a?.[locale]}
                       </div>
                     </motion.div>
                   )}

@@ -47,7 +47,7 @@ export default function TeachingMethod() {
                   <div className="flex items-center justify-center w-20 h-20 mb-4 transition-transform shadow-lg rounded-2xl bg-white text-primary hover:scale-105 border border-primary/10">
                     {Icon && <Icon size={32} />}
                   </div>
-                  <h4 className="font-bold text-foreground">{step[locale]}</h4>
+                  <h4 className="font-bold text-foreground">{step?.[locale]}</h4>
                 </motion.div>
                 
                 {!isLast && (

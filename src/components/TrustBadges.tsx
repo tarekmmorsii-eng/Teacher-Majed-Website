@@ -31,7 +31,7 @@ export default function TrustBadges() {
                 <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary">
                   {Icon && <Icon size={24} />}
                 </div>
-                <span className="font-semibold text-foreground/80">{badge[locale]}</span>
+                <span className="font-semibold text-foreground/80">{badge?.[locale]}</span>
               </motion.div>
             );
           })}

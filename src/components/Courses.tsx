@@ -47,9 +47,9 @@ export default function Courses() {
                   {Icon && <Icon size={32} />}
                 </div>
                 
-                <h3 className="relative z-10 mb-4 text-xl font-bold text-foreground">{course.title[locale]}</h3>
+                <h3 className="relative z-10 mb-4 text-xl font-bold text-foreground">{course.title?.[locale]}</h3>
                 <p className="relative z-10 leading-relaxed text-foreground/70">
-                  {course.description[locale]}
+                  {course.description?.[locale]}
                 </p>
               </motion.div>
             );

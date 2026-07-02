@@ -33,7 +33,7 @@ export default function About() {
             className="flex-shrink-0 w-full lg:w-1/3"
           >
             <div className="relative w-64 h-64 mx-auto overflow-hidden rounded-full shadow-2xl md:w-80 md:h-80 border-4 border-secondary/20">
-              <img src="/teacher-profile.png" alt={teacher.name[locale]} className="object-cover w-full h-full" />
+              <img src="/teacher-profile.png" alt={teacher.name?.[locale]} className="object-cover w-full h-full" />
             </div>
           </motion.div>
 
@@ -45,16 +45,16 @@ export default function About() {
             className="w-full space-y-6 text-lg text-foreground/80 lg:w-2/3"
           >
             <p className="leading-relaxed">
-              {teacher.biography[locale]}
+              {teacher.biography?.[locale]}
             </p>
             <p className="leading-relaxed">
-              {teacher.teachingPhilosophy[locale]}
+              {teacher.teachingPhilosophy?.[locale]}
             </p>
             
             <div className="mt-8">
               <h3 className="mb-4 text-xl font-bold text-primary">{t('qualifications')}</h3>
               <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {teacher.qualifications[locale].map((qual: any, idx: number) => (
+                {teacher.qualifications?.[locale].map((qual: any, idx: number) => (
                   <li key={idx} className="flex items-center gap-2">
                     <span className="text-secondary">✦</span>
                     <span>{qual}</span>

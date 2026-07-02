@@ -40,11 +40,11 @@ export default function Footer() {
           
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <img src="/teacher-profile.png" alt={siteConfig.teacher.name[locale]} className="object-cover w-10 h-10 border-2 border-white/20 rounded-full shadow-sm" />
-              <span className="text-2xl font-bold">{siteConfig.teacher.name[locale]}</span>
+              <img src="/teacher-profile.png" alt={siteConfig.teacher.name?.[locale]} className="object-cover w-10 h-10 border-2 border-white/20 rounded-full shadow-sm" />
+              <span className="text-2xl font-bold">{siteConfig.teacher.name?.[locale]}</span>
             </div>
             <p className="text-white/80 max-w-sm">
-              {siteConfig.teacher.title[locale]}
+              {siteConfig.teacher.title?.[locale]}
             </p>
             <div className="flex flex-wrap gap-4 pt-2">
               {siteConfig.socials.map((social: any, idx: number) => {
@@ -84,7 +84,7 @@ export default function Footer() {
         </div>
 
         <div className="pt-8 text-center border-t border-white/10 text-white/60">
-          <p>© {new Date().getFullYear()} {siteConfig.teacher.name[locale]}. {t('rights')}</p>
+          <p>© {new Date().getFullYear()} {siteConfig.teacher.name?.[locale]}. {t('rights')}</p>
         </div>
       </div>
     </footer>

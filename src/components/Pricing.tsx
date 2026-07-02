@@ -48,7 +48,7 @@ export default function Pricing() {
                 </div>
               )}
               
-              <h3 className="text-2xl font-bold text-center text-foreground">{planNames[plan.id][locale]}</h3>
+              <h3 className="text-2xl font-bold text-center text-foreground">{planNames[plan.id?.toLowerCase()]?.[locale] || plan.id}</h3>
               <div className="flex items-end justify-center gap-1 mt-6 mb-8">
                 <span className="text-5xl font-extrabold text-primary">${plan.price}</span>
                 <span className="mb-2 text-foreground/60">{t('perMonth')}</span>

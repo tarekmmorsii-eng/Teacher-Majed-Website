@@ -13,8 +13,8 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-primary/10 bg-background/80 backdrop-blur-md">
       <div className="container flex items-center justify-between h-20 px-4 mx-auto md:px-8">
         <div className="flex items-center gap-2">
-          <img src="/teacher-profile.png" alt={siteConfig.teacher.name[locale]} className="object-cover w-10 h-10 border-2 rounded-full border-primary/20 shadow-sm" />
-          <span className="font-bold text-foreground">{siteConfig.teacher.name[locale]}</span>
+          <img src="/teacher-profile.png" alt={siteConfig.teacher.name?.[locale]} className="object-cover w-10 h-10 border-2 rounded-full border-primary/20 shadow-sm" />
+          <span className="font-bold text-foreground">{siteConfig.teacher.name?.[locale]}</span>
         </div>
         
         <nav className="hidden gap-6 md:flex text-foreground/80">
