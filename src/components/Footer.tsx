@@ -40,7 +40,7 @@ export default function Footer() {
           
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <img src="/teacher-profile.png" alt={siteConfig.teacher.name?.[locale]} className="object-cover w-10 h-10 border-2 border-white/20 rounded-full shadow-sm" />
+              <img src={siteConfig.teacher.image || '/teacher-profile.png'} alt={siteConfig.teacher.name?.[locale]} className="object-cover w-10 h-10 border-2 border-white/20 rounded-full shadow-sm" />
               <span className="text-2xl font-bold">{siteConfig.teacher.name?.[locale]}</span>
             </div>
             <p className="text-white/80 max-w-sm">

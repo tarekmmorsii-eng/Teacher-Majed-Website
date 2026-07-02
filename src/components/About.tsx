@@ -34,7 +34,7 @@ export default function About() {
             className="flex-shrink-0 w-full lg:w-1/3"
           >
             <div className="relative w-64 h-64 mx-auto overflow-hidden rounded-full shadow-2xl md:w-80 md:h-80 border-4 border-secondary/20">
-              <img src="/teacher-profile.png" alt={teacher.name?.[locale]} className="object-cover w-full h-full" />
+              <img src={teacher.image || '/teacher-profile.png'} alt={teacher.name?.[locale]} className="object-cover w-full h-full" />
             </div>
           </motion.div>
 

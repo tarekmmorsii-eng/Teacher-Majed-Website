@@ -9,6 +9,9 @@ export default function Hero() {
   const t = useTranslations('Hero');
   const siteConfig = useSiteConfig();
 
+  const titleText = siteConfig?.hero?.title?.[locale] || t('title');
+  const subtitleText = siteConfig?.hero?.subtitle?.[locale] || t('subtitle');
+
   return (
     <section className="relative flex flex-col items-center justify-center min-h-[90vh] px-4 overflow-hidden bg-background">
       {/* Decorative background elements */}
@@ -22,7 +25,7 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
           className="text-4xl font-extrabold leading-tight tracking-tight text-foreground md:text-6xl lg:text-7xl"
         >
-          {t('title').split(' ').map((word, i) => (
+          {titleText.split(' ').map((word: string, i: number) => (
             <span key={i} className={i % 2 === 0 ? 'text-primary' : ''}>{word} </span>
           ))}
         </motion.h1>
@@ -33,7 +36,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mt-6 text-xl leading-relaxed text-foreground/80 md:text-2xl"
         >
-          {t('subtitle')}
+          {subtitleText}
         </motion.p>
 
         <motion.div 

@@ -2,6 +2,8 @@ import {setRequestLocale} from 'next-intl/server';
 import Hero from '@/components/Hero';
 import TrustBadges from '@/components/TrustBadges';
 import About from '@/components/About';
+import Videos from '@/components/Videos';
+import Articles from '@/components/Articles';
 import Courses from '@/components/Courses';
 import TeachingMethod from '@/components/TeachingMethod';
 
@@ -20,6 +22,8 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
       <Hero />
       <TrustBadges />
       <About />
+      <Videos />
+      <Articles />
       <Courses />
       <TeachingMethod />
       <WhyChooseUs />

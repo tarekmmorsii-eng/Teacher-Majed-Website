@@ -2,12 +2,32 @@
 
 import { useState } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
+import { auth, db, storage } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
-import { Plus, Trash2, Save, LogOut, LayoutDashboard, Book, DollarSign, MessageSquare, HelpCircle, Star, Settings, UploadCloud } from 'lucide-react';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { Plus, Trash2, Save, LogOut, LayoutDashboard, Book, DollarSign, MessageSquare, HelpCircle, Star, Settings, UploadCloud, Video, FileText } from 'lucide-react';
 
 export default function AdminDashboard({ initialData }: { initialData: any }) {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState({
+    ...initialData,
+    hero: initialData.hero || { title: { ar: '', en: '' }, subtitle: { ar: '', en: '' } },
+    teacher: {
+      ...initialData.teacher,
+      image: initialData.teacher?.image || '/teacher-profile.png'
+    },
+    videos: initialData.videos || [],
+    articles: initialData.articles || [],
+    visibility: initialData.visibility || {
+      teacher: true,
+      courses: true,
+      pricing: true,
+      testimonials: true,
+      faqs: true,
+      socials: true,
+      videos: true,
+      articles: true
+    }
+  });
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const [activeTab, setActiveTab] = useState('teacher');
@@ -57,8 +77,44 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
     }
   };
 
+  const [uploadingImage, setUploadingImage] = useState(false);
+
   const handleLogout = async () => {
     await signOut(auth);
+  };
+
+  const handleImageUpload = async (e: any) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    setMessage('جاري رفع الصورة...');
+    
+    try {
+      const storageRef = ref(storage, `images/teacher-profile-${Date.now()}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        'state_changed',
+        () => {},
+        (error) => {
+          console.error(error);
+          setMessage('فشل رفع الصورة');
+          setUploadingImage(false);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          handleChange(['teacher', 'image'], downloadURL);
+          setMessage('تم رفع الصورة بنجاح!');
+          setUploadingImage(false);
+          setTimeout(() => setMessage(''), 3000);
+        }
+      );
+    } catch (err) {
+      console.error(err);
+      setMessage('حدث خطأ أثناء الرفع');
+      setUploadingImage(false);
+    }
   };
 
   const handleChange = (path: string[], value: any) => {
@@ -120,7 +176,9 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
   );
 
   const tabs = [
-    { id: 'teacher', label: 'المعلم', icon: <LayoutDashboard size={18} /> },
+    { id: 'teacher', label: 'المعلم والواجهة', icon: <LayoutDashboard size={18} /> },
+    { id: 'videos', label: 'الفيديوهات', icon: <Video size={18} /> },
+    { id: 'articles', label: 'المقالات', icon: <FileText size={18} /> },
     { id: 'courses', label: 'الدورات', icon: <Book size={18} /> },
     { id: 'pricing', label: 'الأسعار', icon: <DollarSign size={18} /> },
     { id: 'testimonials', label: 'الآراء', icon: <Star size={18} /> },
@@ -187,6 +245,41 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
             <div className="space-y-6 animate-in fade-in duration-300">
               {renderVisibilityToggle('teacher', 'النبذة والمعلم')}
               <div className="p-6 rounded-xl border border-foreground/10 bg-foreground/5 shadow-sm space-y-6">
+                <h2 className="text-xl font-bold border-b border-foreground/10 pb-4">الواجهة الرئيسية والصورة (Hero)</h2>
+                
+                <div className="flex flex-col md:flex-row gap-8 items-start">
+                  <div className="flex flex-col items-center gap-4">
+                    <img src={data.teacher.image || '/teacher-profile.png'} alt="Teacher" className="w-32 h-32 object-cover rounded-full border-4 border-primary/20" />
+                    <label className="relative cursor-pointer bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-light transition-colors">
+                      <span>{uploadingImage ? 'جاري الرفع...' : 'تغيير الصورة'}</span>
+                      <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
+                    </label>
+                  </div>
+                  
+                  <div className="flex-1 space-y-4 w-full">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block mb-2 text-sm font-bold">عنوان الواجهة (عربي)</label>
+                        <input type="text" value={data.hero.title.ar} onChange={e => handleChange(['hero', 'title', 'ar'], e.target.value)} placeholder="مثال: أتقن تلاوة القرآن الكريم" className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" />
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-bold">عنوان الواجهة (إنجليزي)</label>
+                        <input type="text" value={data.hero.title.en} onChange={e => handleChange(['hero', 'title', 'en'], e.target.value)} placeholder="e.g. Master Tajweed" className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" dir="ltr" />
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-bold">النص الوصفي (عربي)</label>
+                        <textarea value={data.hero.subtitle.ar} onChange={e => handleChange(['hero', 'subtitle', 'ar'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground h-20 resize-none" />
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-bold">النص الوصفي (إنجليزي)</label>
+                        <textarea value={data.hero.subtitle.en} onChange={e => handleChange(['hero', 'subtitle', 'en'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground h-20 resize-none" dir="ltr" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 rounded-xl border border-foreground/10 bg-foreground/5 shadow-sm space-y-6">
                 <h2 className="text-xl font-bold border-b border-foreground/10 pb-4">البيانات الأساسية</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -234,6 +327,88 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
                     <textarea value={data.teacher.teachingPhilosophy.en} onChange={e => handleChange(['teacher', 'teachingPhilosophy', 'en'], e.target.value)} className="w-full px-4 py-3 border border-foreground/20 rounded-lg bg-background text-foreground h-32 resize-none" dir="ltr" />
                   </div>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* VIDEOS TAB */}
+          {activeTab === 'videos' && (
+            <div className="space-y-6 animate-in fade-in duration-300">
+              {renderVisibilityToggle('videos', 'الفيديوهات')}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold">الفيديوهات</h2>
+                <button onClick={() => addArrayItem('videos', { id: `video-${Date.now()}`, title: { ar: '', en: '' }, url: 'https://youtube.com/watch?v=' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-light">
+                  <Plus size={16} /> إضافة فيديو
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 gap-6">
+                {data.videos.map((video: any, index: number) => (
+                  <div key={index} className="p-6 rounded-xl border border-foreground/10 bg-foreground/5 shadow-sm relative group flex flex-col gap-4">
+                    <button onClick={() => removeArrayItem('videos', index)} className="absolute top-4 left-4 p-2 text-red-500 hover:bg-red-100 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" title="حذف">
+                      <Trash2 size={18} />
+                    </button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block mb-2 text-sm font-bold">عنوان الفيديو (عربي)</label>
+                        <input type="text" value={video.title.ar} onChange={e => handleArrayChange('videos', index, ['title', 'ar'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" />
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-bold">عنوان الفيديو (إنجليزي)</label>
+                        <input type="text" value={video.title.en} onChange={e => handleArrayChange('videos', index, ['title', 'en'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" dir="ltr" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block mb-2 text-sm font-bold">رابط الفيديو (YouTube URL)</label>
+                        <input type="url" value={video.url} onChange={e => handleArrayChange('videos', index, ['url'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" dir="ltr" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ARTICLES TAB */}
+          {activeTab === 'articles' && (
+            <div className="space-y-6 animate-in fade-in duration-300">
+              {renderVisibilityToggle('articles', 'المقالات')}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold">المقالات</h2>
+                <button onClick={() => addArrayItem('articles', { id: `article-${Date.now()}`, title: { ar: '', en: '' }, content: { ar: '', en: '' }, date: new Date().toISOString().split('T')[0] })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-light">
+                  <Plus size={16} /> إضافة مقال
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 gap-6">
+                {data.articles.map((article: any, index: number) => (
+                  <div key={index} className="p-6 rounded-xl border border-foreground/10 bg-foreground/5 shadow-sm relative group flex flex-col gap-4">
+                    <button onClick={() => removeArrayItem('articles', index)} className="absolute top-4 left-4 p-2 text-red-500 hover:bg-red-100 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" title="حذف">
+                      <Trash2 size={18} />
+                    </button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block mb-2 text-sm font-bold">العنوان (عربي)</label>
+                        <input type="text" value={article.title.ar} onChange={e => handleArrayChange('articles', index, ['title', 'ar'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" />
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-bold">العنوان (إنجليزي)</label>
+                        <input type="text" value={article.title.en} onChange={e => handleArrayChange('articles', index, ['title', 'en'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" dir="ltr" />
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-bold">المحتوى أو الرابط (عربي)</label>
+                        <textarea value={article.content.ar} onChange={e => handleArrayChange('articles', index, ['content', 'ar'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground h-24 resize-none" />
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-bold">المحتوى أو الرابط (إنجليزي)</label>
+                        <textarea value={article.content.en} onChange={e => handleArrayChange('articles', index, ['content', 'en'], e.target.value)} className="w-full px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground h-24 resize-none" dir="ltr" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block mb-2 text-sm font-bold">التاريخ</label>
+                        <input type="date" value={article.date} onChange={e => handleArrayChange('articles', index, ['date'], e.target.value)} className="w-full md:w-1/2 px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground" dir="ltr" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
