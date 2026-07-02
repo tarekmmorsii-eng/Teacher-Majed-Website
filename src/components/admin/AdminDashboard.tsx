@@ -13,12 +13,14 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
     hero: initialData.hero || { title: { ar: '', en: '' }, subtitle: { ar: '', en: '' } },
     teacher: {
       ...initialData.teacher,
-      image: initialData.teacher?.image || '/teacher-profile.png'
+      image: initialData.teacher?.image || '/teacher-profile.png',
+      qualifications: initialData.teacher?.qualifications || { ar: [], en: [] }
     },
     videos: initialData.videos || [],
     articles: initialData.articles || [],
     visibility: initialData.visibility || {
       teacher: true,
+      qualifications: true,
       courses: true,
       pricing: true,
       testimonials: true,
@@ -325,6 +327,49 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
                   <div>
                     <label className="block mb-2 text-sm font-bold">فلسفة التدريس (إنجليزي)</label>
                     <textarea value={data.teacher.teachingPhilosophy.en} onChange={e => handleChange(['teacher', 'teachingPhilosophy', 'en'], e.target.value)} className="w-full px-4 py-3 border border-foreground/20 rounded-lg bg-background text-foreground h-32 resize-none" dir="ltr" />
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-foreground/10">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-bold">المؤهلات (Qualifications)</h2>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <span className="mr-3 ml-3 text-sm font-medium">عرض القسم</span>
+                      <input 
+                        type="checkbox" 
+                        className="sr-only peer" 
+                        checked={data.visibility?.qualifications !== false}
+                        onChange={(e) => handleChange(['visibility', 'qualifications'], e.target.checked)}
+                      />
+                      <div className="w-11 h-6 bg-foreground/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block mb-2 text-sm font-bold flex justify-between items-center">
+                        المؤهلات (عربي)
+                        <span className="text-xs text-foreground/60 font-normal">اكتب كل مؤهل في سطر منفصل</span>
+                      </label>
+                      <textarea 
+                        value={(data.teacher.qualifications?.ar || []).join('\n')} 
+                        onChange={e => handleChange(['teacher', 'qualifications', 'ar'], e.target.value.split('\n').filter(line => line.trim() !== ''))} 
+                        className="w-full px-4 py-3 border border-foreground/20 rounded-lg bg-background text-foreground h-32 resize-none leading-relaxed" 
+                        placeholder="إجازة برواية حفص عن عاصم&#10;معلم تجويد معتمد..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-2 text-sm font-bold flex justify-between items-center">
+                        المؤهلات (إنجليزي)
+                        <span className="text-xs text-foreground/60 font-normal">اكتب كل مؤهل في سطر منفصل</span>
+                      </label>
+                      <textarea 
+                        value={(data.teacher.qualifications?.en || []).join('\n')} 
+                        onChange={e => handleChange(['teacher', 'qualifications', 'en'], e.target.value.split('\n').filter(line => line.trim() !== ''))} 
+                        className="w-full px-4 py-3 border border-foreground/20 rounded-lg bg-background text-foreground h-32 resize-none leading-relaxed" 
+                        dir="ltr"
+                        placeholder="Ijazah in Hafs 'an 'Asim&#10;Certified Tajweed Teacher..."
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

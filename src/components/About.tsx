@@ -52,17 +52,19 @@ export default function About() {
               {teacher.teachingPhilosophy?.[locale]}
             </p>
             
-            <div className="mt-8">
-              <h3 className="mb-4 text-xl font-bold text-primary">{t('qualifications')}</h3>
-              <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {teacher.qualifications?.[locale].map((qual: any, idx: number) => (
-                  <li key={idx} className="flex items-center gap-2">
-                    <span className="text-secondary">✦</span>
-                    <span>{qual}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {siteConfig?.visibility?.qualifications !== false && teacher.qualifications?.[locale]?.length > 0 && (
+              <div className="mt-8">
+                <h3 className="mb-4 text-xl font-bold text-primary">{t('qualifications')}</h3>
+                <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {teacher.qualifications[locale].map((qual: any, idx: number) => (
+                    <li key={idx} className="flex items-center gap-2">
+                      <span className="text-secondary">✦</span>
+                      <span>{qual}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </motion.div>
         </div>
       </div>
