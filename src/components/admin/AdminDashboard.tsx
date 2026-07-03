@@ -347,12 +347,29 @@ export default function AdminDashboard({ initialData }: { initialData: any }) {
                 <h2 className="text-xl font-bold border-b border-foreground/10 pb-4">الواجهة الرئيسية والصورة (Hero)</h2>
                 
                 <div className="flex flex-col md:flex-row gap-8 items-start">
-                  <div className="flex flex-col items-center gap-4">
+                  <div className="flex flex-col items-center gap-4 shrink-0 w-full md:w-64">
                     <img src={data.teacher.image || '/teacher-profile.png'} alt="Teacher" className="w-32 h-32 object-cover rounded-full border-4 border-primary/20" />
-                    <label className="relative cursor-pointer bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-light transition-colors">
-                      <span>{uploadingImage ? 'جاري الرفع...' : 'تغيير الصورة'}</span>
-                      <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
-                    </label>
+                    
+                    <div className="flex flex-col gap-3 w-full">
+                      <label className="relative cursor-pointer text-center bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-light transition-colors w-full">
+                        <span>{uploadingImage ? 'جاري الرفع...' : 'رفع صورة من الجهاز'}</span>
+                        <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
+                      </label>
+
+                      <div className="text-center text-xs text-foreground/50 font-bold">- أو -</div>
+
+                      <div className="w-full">
+                        <label className="block text-xs font-bold mb-1 text-foreground/70">رابط صورة خارجية (URL)</label>
+                        <input 
+                          type="text" 
+                          placeholder="https://example.com/image.png"
+                          value={data.teacher.image} 
+                          onChange={(e) => handleChange(['teacher', 'image'], e.target.value)} 
+                          className="w-full px-3 py-2 text-sm border border-foreground/20 rounded-lg bg-background text-foreground" 
+                          dir="ltr"
+                        />
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="flex-1 space-y-4 w-full">
